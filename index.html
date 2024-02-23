@@ -7,10 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="btn-qr">
-        <button id="btn-scan-qr">Quét mã</button>
-    </div>
-    <div style="width: 500px;" id="qr-reader"></div>
+   
+    <div style="width: 100%;" id="qr-reader"></div>
     <div id="qr-result"></div>
     <form id="qr-form" action="https://script.google.com/macros/s/AKfycbzk0gQpq3FLTLkc2FKyXyUdXjtbP1WKFKRFMANr8SG-jOUBf2rewZxzjgGzufvOLE8S8A/exec" method="GET" style="display: none;">
         <input type="text" id="type" name="type" placeholder="Type" required>
@@ -23,8 +21,8 @@
 </body>
 
 <script>
-    document.getElementById('btn-scan-qr').addEventListener('click', function() {
-        const html5QrCode = new Html5Qrcode("qr-reader");
+  window.addEventListener('load', function() {
+    const html5QrCode = new Html5Qrcode("qr-reader");
         const config = { fps: 10, qrbox: { width: 250, height: 250 } };
         
         function onScanSuccess(decodedText, decodedResult) {
@@ -59,18 +57,16 @@
         console.error('QR code does not contain expected data.');
     }
 
-    // Dừng quét QR
-    html5QrCode.stop().then(() => {
-        console.log("QR Scanning stopped.");
-    }).catch((err) => {
-        console.error("Error stopping QR scan", err);
-    });
+   
 }
 
 
         // Start scanning. You can provide additional configuration to customize the scan.
         html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure);
-    });
+   
+  })
+   
+        
 </script>
 
 </html>

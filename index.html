@@ -57,16 +57,13 @@
         function onScanFailure(error) {
             console.warn(`QR code scanning failed. Reason: ${error}`);
         }
-    
         document.getElementById('processScan').addEventListener('click', function() {
     const button = document.getElementById('processScan');
-    button.disabled = true; // Vô hiệu hóa nút khi bắt đầu xử lý
+    button.disabled = true;
 
-    // Kiểm tra xem có dữ liệu quét được không
     if (lastScannedText) {
         const parts = lastScannedText.split('-');
         if (parts.length === 4) {
-            // Nếu có dữ liệu hợp lệ, tạo URL với query params
             const queryParams = new URLSearchParams({
                 type: parts[0].trim(),
                 name: parts[1].trim(),
@@ -75,28 +72,29 @@
             }).toString();
             const url = `https://script.google.com/macros/s/AKfycbzk0gQpq3FLTLkc2FKyXyUdXjtbP1WKFKRFMANr8SG-jOUBf2rewZxzjgGzufvOLE8S8A/exec?${queryParams}`;
 
-            // Thực hiện fetch request
-            fetch(url)
-            .then(response => response.text())
-            .then(response => {
-                alert('Thành công!');
-                button.disabled = false; // Kích hoạt lại nút sau khi hoàn thành
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                button.disabled = false; // Kích hoạt lại nút nếu có lỗi xảy ra
-            });
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert('Thành công!');
+                    button.disabled = false;
+                }
+            };
+            xhr.onerror = function() {
+                alert('Có lỗi xảy ra.');
+                button.disabled = false;
+            };
+            xhr.send();
         } else {
-            // Nếu dữ liệu không hợp lệ
             alert('QR code does not contain expected data.');
-            button.disabled = false; // Kích hoạt lại nút
+            button.disabled = false;
         }
     } else {
-        // Nếu không có dữ liệu quét được
         alert('No QR code data found.');
-        button.disabled = false; // Kích hoạt lại nút
+        button.disabled = false;
     }
 });
+
 
 
     });

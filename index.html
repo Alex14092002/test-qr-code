@@ -51,20 +51,16 @@
         document.getElementById('phone').value = parts[2].trim();
         document.getElementById('email').value = parts[3].trim();
 
-        // Tự động submit form
-        document.getElementById('qr-form').submit();
+        // Hiển thị dữ liệu quét được hoặc xử lý theo nhu cầu
+        // Ví dụ: hiển thị thông báo hoặc gửi dữ liệu đến server
+
+        // LƯU Ý: Không gọi hàm stop() ở đây để giữ camera hoạt động
+        console.log("Data processed, ready for the next QR code.");
     } else {
         console.error('QR code does not contain expected data.');
     }
-
-    // Dừng quét QR
-    html5QrCode.stop().then(() => {
-        console.log("QR Scanning stopped.");
-    }).catch((err) => {
-        console.error("Error stopping QR scan", err);
-    });
+    // Bạn có thể thêm một cơ chế để người dùng có thể dừng camera một cách thủ công nếu muốn
 }
-
 
         // Start scanning. You can provide additional configuration to customize the scan.
         html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure);

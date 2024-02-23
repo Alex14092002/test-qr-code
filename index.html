@@ -21,53 +21,42 @@
 </body>
 
 <script>
-  window.addEventListener('load', function() {
-    const html5QrCode = new Html5Qrcode("qr-reader");
-        const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-        
-        function onScanSuccess(decodedText, decodedResult) {
-            // Handle on success condition with the decoded text or result.
-            console.log(`QR code detected, text: ${decodedText}`);
-            html5QrCode.stop().then((ignore) => {
-                // QR Code scanning is stopped.
-                console.log("QR Scanning stopped.");
-            }).catch((err) => {
-                // Stop failed, handle it.
-            });
+    window.addEventListener('load', function() {
+      const html5QrCode = new Html5Qrcode("qr-reader");
+      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+    
+      function onScanSuccess(decodedText, decodedResult) {
+        // Phân tách kết quả quét
+        const parts = decodedText.split('-');
+        if (parts.length === 4) {
+          // Điền thông tin vào form
+          document.getElementById('type').value = parts[0].trim();
+          document.getElementById('name').value = parts[1].trim();
+          document.getElementById('phone').value = parts[2].trim();
+          document.getElementById('email').value = parts[3].trim();
+    
+          // Thực hiện hành động (ví dụ: hiển thị thông báo, thay đổi độ mờ)
+          document.getElementById('qr-reader').style.opacity = '0.5'; // Giảm độ mờ để thông báo đang xử lý
+          console.log("Data processed, preparing for the next QR code...");
+    
+          setTimeout(() => {
+            document.getElementById('qr-form').submit(); // Chuyển form sau 1 giây
+            document.getElementById('qr-reader').style.opacity = '1'; // Khôi phục độ mờ
+            console.log("Ready for the next QR code.");
+          }, 1000); // Đặt thời gian chờ là 1 giây
+    
+        } else {
+          console.error('QR code does not contain expected data.');
         }
-
-        function onScanFailure(error) {
-            // Handle scan failure, usually better to ignore and keep scanning.
-            console.warn(`QR code scanning failed. Reason: ${error}`);
-        }
-
-        function onScanSuccess(decodedText, decodedResult) {
-    // Phân tách kết quả quét dựa trên dấu cách
-    const parts = decodedText.split('-');
-    if (parts.length === 4) {
-        // Điền thông tin vào form
-        document.getElementById('type').value = parts[0].trim();
-        document.getElementById('name').value = parts[1].trim();
-        document.getElementById('phone').value = parts[2].trim();
-        document.getElementById('email').value = parts[3].trim();
-        document.getElementById('qr-form').submit();
-        // Hiển thị dữ liệu quét được hoặc xử lý theo nhu cầu
-        // Ví dụ: hiển thị thông báo hoặc gửi dữ liệu đến server
-
-        // LƯU Ý: Không gọi hàm stop() ở đây để giữ camera hoạt động
-        console.log("Data processed, ready for the next QR code.");
-    } else {
-        console.error('QR code does not contain expected data.');
-    }
-    // Bạn có thể thêm một cơ chế để người dùng có thể dừng camera một cách thủ công nếu muốn
-}
-
-        // Start scanning. You can provide additional configuration to customize the scan.
-        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure);
-   
-  })
-   
-        
-</script>
-
+      }
+    
+      function onScanFailure(error) {
+        console.warn(`QR code scanning failed. Reason: ${error}`);
+      }
+    
+      // Start scanning
+      html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure);
+    })
+    </script>
+    
 </html>

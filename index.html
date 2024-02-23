@@ -79,8 +79,10 @@
                 document.getElementById('qr-form').submit();
 
                 // Reset trạng thái sau khi submit
-                alert('Form đã được gửi!');
+                setTimeout(() => {
+                    alert('Form đã được gửi!');
                     button.disabled = false;
+                }, 1000); // Đặt timeout để đảm bảo form đã được gửi trước khi reset trạng thái nút
             } else {
                 alert('QR code does not contain expected data.');
                 button.disabled = false;

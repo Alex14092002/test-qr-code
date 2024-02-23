@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="btn-qr">
+        <button id="btn-scan-qr">Quét mã</button>
+    </div>
+    <div style="width: 500px;" id="qr-reader"></div>
+    <div id="qr-result"></div>
+
+</body>
+
+<script>
+    document.getElementById('btn-scan-qr').addEventListener('click', function() {
+        const html5QrCode = new Html5Qrcode("qr-reader");
+        const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+        
+        function onScanSuccess(decodedText, decodedResult) {
+            // Handle on success condition with the decoded text or result.
+            console.log(`QR code detected, text: ${decodedText}`);
+            html5QrCode.stop().then((ignore) => {
+                // QR Code scanning is stopped.
+                console.log("QR Scanning stopped.");
+            }).catch((err) => {
+                // Stop failed, handle it.
+            });
+        }
+
+        function onScanFailure(error) {
+            // Handle scan failure, usually better to ignore and keep scanning.
+            console.warn(`QR code scanning failed. Reason: ${error}`);
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+    // Log thông tin quét được ra console.
+    console.log(`QR code detected, text: ${decodedText}`);
+    
+    // Cập nhật nội dung của div 'qr-result' với thông tin quét được.
+    document.getElementById('qr-result').innerText = `Kết quả quét: ${decodedText}`;
+
+    // Dừng quét QR.
+    html5QrCode.stop().then((ignore) => {
+        console.log("QR Scanning stopped.");
+    }).catch((err) => {
+        console.error("Error stopping QR scan", err);
+    });
+}
+
+        // Start scanning. You can provide additional configuration to customize the scan.
+        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure);
+    });
+</script>
+
+</html>

@@ -27,77 +27,70 @@
    
     <div style="width: 100%;" id="qr-reader"></div>
     <div id="qr-result"></div>
-    <form id="qr-form"  style="display: none;">
+    <form id="qr-form" target="hidden_iframe" action="https://script.google.com/macros/s/your_script_id/exec" method="GET" style="display: none;">
         <input type="text" id="type" name="type" placeholder="Type" required>
         <input type="text" id="name" name="name" placeholder="Name" required>
         <input type="text" id="phone" name="phone" placeholder="Phone" required>
         <input type="email" id="email" name="email" placeholder="Email" required>
         <button type="submit">Submit</button>
     </form>
+    
     <div class="btn-ok">
         <button id="processScan">Quét Mã</button>
     </div>
    
 <!-- Thông báo thành công sau khi quét -->
 <div id="successMessage" style="display: none;">Quét thành công!</div>
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
 
 </body>
-<script>
-    window.addEventListener('load', function() {
-        const html5QrCode = new Html5Qrcode("qr-reader");
-        const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-        let lastScannedText = null; // Lưu trữ kết quả quét cuối cùng
-    
-        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure);
-    
-        function onScanSuccess(decodedText, decodedResult) {
-            lastScannedText = decodedText; // Cập nhật kết quả quét mới nhất
-        }
-    
-        function onScanFailure(error) {
-            console.warn(`QR code scanning failed. Reason: ${error}`);
-        }
-        document.getElementById('processScan').addEventListener('click', function() {
-    const button = document.getElementById('processScan');
-    button.disabled = true;
+    <script>
+        window.addEventListener('load', function() {
+    const html5QrCode = new Html5Qrcode("qr-reader");
+    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+    let lastScannedText = null; // Lưu trữ kết quả quét cuối cùng
 
-    if (lastScannedText) {
-        const parts = lastScannedText.split('-');
-        if (parts.length === 4) {
-            const queryParams = new URLSearchParams({
-                type: parts[0].trim(),
-                name: parts[1].trim(),
-                phone: parts[2].trim(),
-                email: parts[3].trim()
-            }).toString();
-            const url = `https://script.google.com/macros/s/AKfycbzk0gQpq3FLTLkc2FKyXyUdXjtbP1WKFKRFMANr8SG-jOUBf2rewZxzjgGzufvOLE8S8A/exec?${queryParams}`;
+    html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure);
 
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", url, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    alert('Thành công!');
+    function onScanSuccess(decodedText, decodedResult) {
+        lastScannedText = decodedText; // Cập nhật kết quả quét mới nhất
+        document.getElementById('processScan').disabled = false; // Kích hoạt lại nút nếu quét thành công
+    }
+
+    function onScanFailure(error) {
+        console.warn(`QR code scanning failed. Reason: ${error}`);
+    }
+
+    document.getElementById('processScan').addEventListener('click', function() {
+        const button = document.getElementById('processScan');
+        button.disabled = true; // Vô hiệu hóa nút khi bắt đầu xử lý
+
+        if (lastScannedText) {
+            const parts = lastScannedText.split('-');
+            if (parts.length === 4) {
+                // Thiết lập các giá trị cho form
+                document.getElementById('type').value = parts[0].trim();
+                document.getElementById('name').value = parts[1].trim();
+                document.getElementById('phone').value = parts[2].trim();
+                document.getElementById('email').value = parts[3].trim();
+
+                // Submit form
+                document.getElementById('qr-form').submit();
+
+                // Reset trạng thái sau khi submit
+                alert('Form đã được gửi!');
                     button.disabled = false;
-                }
-            };
-            xhr.onerror = function() {
-                alert('Có lỗi xảy ra.');
+            } else {
+                alert('QR code does not contain expected data.');
                 button.disabled = false;
-            };
-            xhr.send();
+            }
         } else {
-            alert('QR code does not contain expected data.');
+            alert('No QR code data found.');
             button.disabled = false;
         }
-    } else {
-        alert('No QR code data found.');
-        button.disabled = false;
-    }
+    });
 });
 
-
-
-    });
     </script>
-    
 </html>

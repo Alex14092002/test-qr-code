@@ -55,31 +55,32 @@
         }
     
         document.getElementById('processScan').addEventListener('click', function() {
-            if (lastScannedText !== null) {
-                const parts = lastScannedText.split('-');
-                if (parts.length === 4) {
-                    const formData = new FormData();
-                    formData.append('type', parts[0].trim());
-                    formData.append('name', parts[1].trim());
-                    formData.append('phone', parts[2].trim());
-                    formData.append('email', parts[3].trim());
-    
-                    // Sử dụng fetch để gửi dữ liệu
-                    fetch('https://script.google.com/macros/s/AKfycbzk0gQpq3FLTLkc2FKyXyUdXjtbP1WKFKRFMANr8SG-jOUBf2rewZxzjgGzufvOLE8S8A/exec', {
-                        method: 'GET',
-                        body: formData
-                    })
-                    .then(response => response.text())
-                    .then(response => {
-                        alert('Thành công!');
-                        // Hiển thị thông báo thành công hoặc xử lý tiếp
-                    })
-                    .catch(error => console.error('Error:', error));
-                } else {
-                    console.error('QR code does not contain expected data.');
-                }
-            }
-        });
+    if (lastScannedText !== null) {
+        const parts = lastScannedText.split('-');
+        if (parts.length === 4) {
+            const queryParams = new URLSearchParams({
+                type: parts[0].trim(),
+                name: parts[1].trim(),
+                phone: parts[2].trim(),
+                email: parts[3].trim()
+            }).toString();
+
+            const url = `https://script.google.com/macros/s/AKfycbzk0gQpq3FLTLkc2FKyXyUdXjtbP1WKFKRFMANr8SG-jOUBf2rewZxzjgGzufvOLE8S8A/exec?${queryParams}`;
+
+            // Sử dụng fetch với phương thức GET
+            fetch(url)
+            .then(response => response.text())
+            .then(response => {
+                alert('Thành công!');
+                // Hiển thị thông báo thành công hoặc xử lý tiếp
+            })
+            .catch(error => console.error('Error:', error));
+        } else {
+            console.error('QR code does not contain expected data.');
+        }
+    }
+});
+
     });
     </script>
     

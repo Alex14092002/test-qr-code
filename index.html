@@ -13,10 +13,14 @@
         #processScan{
             background-color:forestgreen;
             color: #fff;
-            padding: 10px 30px;
+            padding: 15px 35px;
             border: none;
             margin-top: 20px;
-           
+           font-size: 25px;
+           font-weight: bold;
+        }
+        .processScan:disabled{
+            opacity: 0.5;
         }
     </style>
 <body>
@@ -55,6 +59,8 @@
         }
     
         document.getElementById('processScan').addEventListener('click', function() {
+            const button = document.getElementById('processScan');
+    button.disabled = true; // Vô hiệu hóa nút khi bắt đầu xử lý
     if (lastScannedText !== null) {
         const parts = lastScannedText.split('-');
         if (parts.length === 4) {
@@ -73,10 +79,16 @@
             .then(response => {
                 alert('Thành công!');
                 // Hiển thị thông báo thành công hoặc xử lý tiếp
+                button.disabled = false;
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                // Kích hoạt lại nút nếu có lỗi xảy ra
+                button.disabled = false;
+            });
         } else {
             console.error('QR code does not contain expected data.');
+            button.disabled = false;
         }
     }
 });

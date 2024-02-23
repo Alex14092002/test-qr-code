@@ -12,7 +12,14 @@
     </div>
     <div style="width: 500px;" id="qr-reader"></div>
     <div id="qr-result"></div>
-
+    <form id="qr-form" action="https://script.google.com/macros/s/AKfycbzk0gQpq3FLTLkc2FKyXyUdXjtbP1WKFKRFMANr8SG-jOUBf2rewZxzjgGzufvOLE8S8A/exec" method="GET" style="display: none;">
+        <input type="text" id="type" name="type" placeholder="Type" required>
+        <input type="text" id="name" name="name" placeholder="Name" required>
+        <input type="text" id="phone" name="phone" placeholder="Phone" required>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+        <button type="submit">Submit</button>
+    </form>
+    
 </body>
 
 <script>
@@ -37,19 +44,29 @@
         }
 
         function onScanSuccess(decodedText, decodedResult) {
-    // Log thông tin quét được ra console.
-    console.log(`QR code detected, text: ${decodedText}`);
-    
-    // Cập nhật nội dung của div 'qr-result' với thông tin quét được.
-    document.getElementById('qr-result').innerText = `Kết quả quét: ${decodedText}`;
+    // Phân tách kết quả quét dựa trên dấu cách
+    const parts = decodedText.split('-');
+    if (parts.length === 4) {
+        // Điền thông tin vào form
+        document.getElementById('type').value = parts[0].trim();
+        document.getElementById('name').value = parts[1].trim();
+        document.getElementById('phone').value = parts[2].trim();
+        document.getElementById('email').value = parts[3].trim();
 
-    // Dừng quét QR.
-    html5QrCode.stop().then((ignore) => {
+        // Tự động submit form
+        document.getElementById('qr-form').submit();
+    } else {
+        console.error('QR code does not contain expected data.');
+    }
+
+    // Dừng quét QR
+    html5QrCode.stop().then(() => {
         console.log("QR Scanning stopped.");
     }).catch((err) => {
         console.error("Error stopping QR scan", err);
     });
 }
+
 
         // Start scanning. You can provide additional configuration to customize the scan.
         html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure);

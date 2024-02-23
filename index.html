@@ -57,7 +57,12 @@
         console.error('QR code does not contain expected data.');
     }
 
-   
+    // Dừng quét QR
+    html5QrCode.stop().then(() => {
+        console.log("QR Scanning stopped.");
+    }).catch((err) => {
+        console.error("Error stopping QR scan", err);
+    });
 }
 
 

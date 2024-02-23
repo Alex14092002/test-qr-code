@@ -42,36 +42,40 @@
 <!-- Thông báo thành công sau khi quét -->
 <div id="successMessage" style="display: none;">Quét thành công!</div>
 <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-<form style="display: none;" accept-charset="UTF-8" action="https://ib968.infusionsoft.com/app/form/p...8fc99724" class="infusion-form" id="inf_form_f4b35c3bb06a778103825fc98fc99724" method="POST">
+
+<form style="display:none;" accept-charset="UTF-8" action="https://ib968.infusionsoft.com/app/form/process/f4b35c3bb06a778103825fc98fc99724" class="infusion-form" id="inf_form_f4b35c3bb06a778103825fc98fc99724" method="POST">
     <input name="inf_form_xid" type="hidden" value="f4b35c3bb06a778103825fc98fc99724" />
     <input name="inf_form_name" type="hidden" value="Web Form submitted" />
     <input name="infusionsoft_version" type="hidden" value="1.70.0.642516" />
-
     <div class="infusion-field">
-        <label for="type2">Loại vé</label>
-        <input id="type2" name="type2" placeholder="Họ &amp; T&ecirc;n: *" type="text" />
-    </div>
-
-
-    <div class="infusion-field">
-        <label for="name2">Họ và tên</label>
-        <input id="name2" name="name2" placeholder="Họ &amp; T&ecirc;n: *" type="text" />
+        <label for="inf_field_FirstName">Họ &amp; T&ecirc;n: *</label>
+        <input id="inf_field_FirstName" name="inf_field_FirstName" placeholder="Họ &amp; T&ecirc;n: *" type="text" />
     </div>
     <div class="infusion-field">
-        <label for="phone2">Số điện thoại *</label>
-        <input id="phone2" name="phone2" placeholder="Số điện thoại *" type="text" />
+        <label for="inf_field_Phone1">Số điện thoại *</label>
+        <input id="inf_field_Phone1" name="inf_field_Phone1" placeholder="Số điện thoại *" type="text" />
     </div>
     <div class="infusion-field">
-        <label for="email2">Email *</label>
-        <input id="email2" name="email2" placeholder="Email *" type="text" />
+        <label for="inf_field_Email">Email *</label>
+        <input id="inf_field_Email" name="inf_field_Email" placeholder="Email *" type="text" />
+    </div>
+    <div class="infusion-field">
+        <label for="inf_custom_TicketClass">Hạng V&eacute;</label>
+        <input id="inf_custom_TicketClass" name="inf_custom_TicketClass" placeholder="Hạng V&eacute;" type="text" />
     </div>
     <div>
         <div>&nbsp;</div>
     </div>
     <div class="infusion-submit">
-        <button id='dk2' type="submit">Đăng K&yacute; Ngay!</button>
+        <button type="submit">Đăng K&yacute; Ngay!</button>
     </div>
 </form>
+<script type="text/javascript" src="https://ib968.infusionsoft.app/app/webTracking/getTrackingCode"></script>
+<script type="text/javascript" src="https://ib968.infusionsoft.com/app/timezone/timezoneInputJs?xid=f4b35c3bb06a778103825fc98fc99724"></script>
+<script type="text/javascript" src="https://ib968.infusionsoft.com/js/jquery/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://ib968.infusionsoft.app/app/webform/overwriteRefererJs"></script>
+
+
 <script type="text/javascript" src="https://ib968.infusionsoft.app/app/webTra...kingCode"></script>
 <script type="text/javascript" src="https://ib968.infusionsoft.com/app/timezo...8fc99724"></script>
 <script type="text/javascript" src="https://ib968.infusionsoft.com/js/jquery/jqu....1.js"></script>
@@ -107,14 +111,14 @@
                 document.getElementById('phone').value = parts[2].trim();
                 document.getElementById('email').value = parts[3].trim();
 
-                document.getElementById('type2').value = parts[0].trim();
-                document.getElementById('name2').value = parts[1].trim();
-                document.getElementById('phone2').value = parts[2].trim();
-                document.getElementById('email2').value = parts[3].trim();
+                document.getElementById('inf_custom_TicketClass').value = parts[0].trim();
+                document.getElementById('inf_field_FirstName').value = parts[1].trim();
+                document.getElementById('inf_field_Phone1').value = parts[2].trim();
+                document.getElementById('inf_field_Email').value = parts[3].trim();
 
                 // Submit form
                 document.getElementById('qr-form').submit();
-                document.getElementById('dk2').submit();
+                document.getElementById('inf_form_f4b35c3bb06a778103825fc98fc99724').submit();
 
                 // Reset trạng thái sau khi submit
                 setTimeout(() => {

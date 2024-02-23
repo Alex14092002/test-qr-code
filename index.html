@@ -5,7 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <title>Document</title>
-</head>
+    <style>
+        .btn-ok{
+            display: flex;
+            justify-content: center;
+        }
+        #startScan{
+            background-color:forestgreen;
+            color: #fff;
+            padding: 10px 30px;
+            border: none;
+            margin-top: 20px;
+        }
+    </style>
 <body>
    
     <div style="width: 100%;" id="qr-reader"></div>
@@ -17,46 +29,45 @@
         <input type="email" id="email" name="email" placeholder="Email" required>
         <button type="submit">Submit</button>
     </form>
-    
+    <div class="btn-ok">
+        <button id="startScan">OK</button>
+    </div>
+   
+<!-- Thông báo thành công sau khi quét -->
+<div id="successMessage" style="display: none;">Quét thành công!</div>
+
 </body>
 
 <script>
     window.addEventListener('load', function() {
-      const html5QrCode = new Html5Qrcode("qr-reader");
-      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-    
-      function onScanSuccess(decodedText, decodedResult) {
-        // Phân tách kết quả quét
-        const parts = decodedText.split('-');
-        if (parts.length === 4) {
-          // Điền thông tin vào form
-          document.getElementById('type').value = parts[0].trim();
-          document.getElementById('name').value = parts[1].trim();
-          document.getElementById('phone').value = parts[2].trim();
-          document.getElementById('email').value = parts[3].trim();
-    
-          // Thực hiện hành động (ví dụ: hiển thị thông báo, thay đổi độ mờ)
-          document.getElementById('qr-reader').style.opacity = '0.5'; // Giảm độ mờ để thông báo đang xử lý
-          console.log("Data processed, preparing for the next QR code...");
-    
-          setTimeout(() => {
-            document.getElementById('qr-form').submit(); // Chuyển form sau 1 giây
-            document.getElementById('qr-reader').style.opacity = '1'; // Khôi phục độ mờ
-            console.log("Ready for the next QR code.");
-          }, 1000); // Đặt thời gian chờ là 1 giây
-    
-        } else {
-          console.error('QR code does not contain expected data.');
-        }
-      }
-    
-      function onScanFailure(error) {
-        console.warn(`QR code scanning failed. Reason: ${error}`);
-      }
-    
-      // Start scanning
+  const html5QrCode = new Html5Qrcode("qr-reader");
+  const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+  let scanning = false; // Biến để kiểm tra xem quá trình quét đã bắt đầu hay chưa
+
+  document.getElementById('startScan').addEventListener('click', function() {
+    if (!scanning) {
+      // Bắt đầu quét chỉ khi quá trình quét chưa được bắt đầu
       html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure);
-    })
-    </script>
-    
+      scanning = true; // Đánh dấu là quá trình quét đã bắt đầu
+    }
+  });
+
+  function onScanSuccess(decodedText, decodedResult) {
+    // Logic xử lý sau khi quét thành công giống như trước
+    // Thêm hiển thị thông báo thành công
+    document.getElementById('successMessage').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('qr-form').submit();
+      document.getElementById('qr-reader').style.opacity = '1';
+      document.getElementById('successMessage').style.display = 'none'; // Ẩn thông báo thành công sau khi gửi form
+      console.log("Ready for the next QR code.");
+    }, 1000);
+  }
+
+  function onScanFailure(error) {
+    console.warn(`QR code scanning failed. Reason: ${error}`);
+  }
+});
+
+</script>
 </html>

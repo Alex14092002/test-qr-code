@@ -161,13 +161,18 @@
 <script type="text/javascript" src="https://ib968.infusionsoft.app/app/webfor...efererJs"></script>
 </body>
 <script>
-    function adjustQRReaderHeight() {
+  function setCameraHeight() {
+    // Lấy chiều cao thực tế của window
+    const height = window.innerHeight;
+    // Áp dụng chiều cao này cho qr-reader
     const qrReader = document.getElementById('qr-reader');
-    qrReader.style.height = `${window.innerHeight}px`;
+    qrReader.style.height = `${height}px`;
 }
 
-window.addEventListener('load', adjustQRReaderHeight);
-window.addEventListener('resize', adjustQRReaderHeight);
+// Gọi hàm này khi trang được tải và khi cửa sổ được resize
+window.addEventListener('load', setCameraHeight);
+window.addEventListener('resize', setCameraHeight);
+
 
   window.addEventListener('load', function() {
     // Khởi tạo Html5Qrcode scanner

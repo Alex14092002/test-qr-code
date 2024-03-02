@@ -200,6 +200,34 @@
     });
 });
 
+document.addEventListener('DOMContentLoaded', (event) => {
+    let touchstartY = 0;
+    let touchendY = 0;
+
+    const popupResult = document.querySelector('.popup-result');
+    
+    function checkSwipeDown() {
+        if (touchendY < touchstartY) {
+            console.log('Swiped Up');
+        }
+        
+        if (touchendY > touchstartY) {
+            console.log('Swiped Down');
+            // Đẩy `popup-result` xuống dưới màn hình
+            popupResult.style.bottom = '-25%'; // Hoặc một giá trị tùy thuộc vào chiều cao của popup
+        }
+    }
+
+    popupResult.addEventListener('touchstart', (e) => {
+        touchstartY = e.changedTouches[0].screenY;
+    }, false);
+
+    popupResult.addEventListener('touchend', (e) => {
+        touchendY = e.changedTouches[0].screenY;
+        checkSwipeDown();
+    }, false);
+});
+
 
 </script>
 </html>

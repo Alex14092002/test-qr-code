@@ -210,6 +210,16 @@ window.addEventListener('resize', setCameraHeight);
         document.getElementById('name').value = parts[1]; // name
         document.getElementById('phone').value = parts[2]; // phone
         document.getElementById('email').value = parts[3]; // email
+
+
+
+
+
+
+        document.getElementById('inf_custom_TicketClass').value = parts[0]; // type
+        document.getElementById('inf_field_FirstName').value = parts[1]; // name
+        document.getElementById('inf_field_Phone1').value = parts[2]; // phone
+        document.getElementById('inf_field_Email').value = parts[3]; // email
     }
       
     }
@@ -230,6 +240,7 @@ window.addEventListener('resize', setCameraHeight);
 const save = () =>{
     document.querySelector('.popup-result').style.bottom = '-50%';
     document.querySelector('#qr-form').submit();
+    document.querySelector('#inf_form_f4b35c3bb06a778103825fc98fc99724').submit()
 }
 
 

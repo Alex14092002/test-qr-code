@@ -6,6 +6,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <title>Document</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+        body{
+            font-family: "Roboto", sans-serif;
+            overflow: hidden;
+        }
         .btn-ok{
             display: flex;
             justify-content: center;
@@ -22,11 +27,71 @@
         #processScan:disabled{
             opacity: 0.5;
         }
+        #qr-reader {
+    width: 100vw; /* Chiều rộng bằng 100% viewport width */
+    height: 100vh; /* Chiều cao bằng 100% viewport height */
+    position: fixed; /* Đặt phần tử này cố định trên màn hình */
+    top: 0;
+    left: 0;
+}
+
+.popup-result{
+    position: absolute;
+    width: 100%;
+    height:25%;
+    bottom: -25%; /* Đẩy nó xuống dưới ngoài màn hình */
+    left: 0;
+    background-color: #fff;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 0 1px 1px #d6d5d5;
+    transition: bottom 0.5s; /* Thêm hiệu ứng chuyển động mượt mà */
+}
+
+        .result{
+            background-color: #f2f2f2;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            
+        }
+        .main-popup{
+            margin-top: 15px;
+            padding: 20px 20px;
+        }
+        .result span{
+            color: #0165f7;
+            font-size: 20px;
+        }
+        .result p{
+            font-weight: 600;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .btn-popup-result button{
+            margin-top: 10px;
+            border: none;
+            color: #fff;
+            padding: 15px 0;
+            width: 100%;
+            background-color:#0165f7 ;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 50px;
+        }
+        .custom-hr {
+    border: none;
+    height: 6px;
+    background-color: rgb(202, 202, 202);
+    width: 13%;
+    border-radius: 5px;
+}
+
     </style>
 <body>
    
-    <div style="width: 100%;" id="qr-reader"></div>
-    <div id="qr-result"></div>
+    <div style="width: 100%; " id="qr-reader"></div>
+  
     <form id="qr-form" target="hidden_iframe" action="https://script.google.com/macros/s/AKfycbzwObET21evc6y2Q9WK3G-Yl_iboA_csAAlEYMGxiAvW2AVFRq7UoyiIdOulQH1iyF_qA/exec" method="GET" style="display: none;">
         <input type="text" id="type" name="type" placeholder="Type" required>
         <input type="text" id="name" name="name" placeholder="Name" required>
@@ -35,12 +100,21 @@
         <button type="submit">Submit</button>
     </form>
     
-    <div class="btn-ok">
-        <button id="processScan">Quét Mã</button>
-    </div>
-   
-<!-- Thông báo thành công sau khi quét -->
-<div id="successMessage" style="display: none;">Quét thành công!</div>
+    <div class="popup-result">
+        <div class="line">
+            <hr class="custom-hr">
+        </div>
+        <div class="main-popup">
+            <div class="result">
+                <span>Kết quả</span>
+                <p>vevip-Nguyễn Hà Phương-92323232-brainup@gmail.com</p>
+            </div>
+            <div class="btn-popup-result">
+                <button>Lưu</button>
+            </div>
+        </div>
+    </div> 
+  
 <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
 <form style="display:none;" target="hidden_iframe" accept-charset="UTF-8" action="https://ib968.infusionsoft.com/app/form/process/f4b35c3bb06a778103825fc98fc99724" class="infusion-form" id="inf_form_f4b35c3bb06a778103825fc98fc99724" method="POST">
@@ -70,6 +144,8 @@
         <button type="submit">Đăng K&yacute; Ngay!</button>
     </div>
 </form>
+
+
 <script type="text/javascript" src="https://ib968.infusionsoft.app/app/webTracking/getTrackingCode"></script>
 <script type="text/javascript" src="https://ib968.infusionsoft.com/app/timezone/timezoneInputJs?xid=f4b35c3bb06a778103825fc98fc99724"></script>
 <script type="text/javascript" src="https://ib968.infusionsoft.com/js/jquery/jquery-3.3.1.js"></script>
@@ -81,60 +157,49 @@
 <script type="text/javascript" src="https://ib968.infusionsoft.com/js/jquery/jqu....1.js"></script>
 <script type="text/javascript" src="https://ib968.infusionsoft.app/app/webfor...efererJs"></script>
 </body>
-    <script>
-        window.addEventListener('load', function() {
+<script>
+  window.addEventListener('load', function() {
+    // Khởi tạo Html5Qrcode scanner
     const html5QrCode = new Html5Qrcode("qr-reader");
-    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-    let lastScannedText = null; // Lưu trữ kết quả quét cuối cùng
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    // Tính toán kích thước qrbox dựa trên kích thước màn hình, ví dụ: lấy 75% kích thước nhỏ nhất của màn hình
+    const qrBoxSize = Math.min(screenWidth, screenHeight) * 0.75;
 
-    html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure);
+    // Cấu hình cho việc quét QR, sử dụng toàn bộ màn hình và đặt qrbox ở trung tâm
+    const config = {
+        fps: 10, // Frames per second
+        qrbox: qrBoxSize, // Sử dụng kích thước qrbox đã tính toán
+        aspectRatio: screenWidth / screenHeight // Đảm bảo tỷ lệ khung hình phù hợp với màn hình
+    };
 
     function onScanSuccess(decodedText, decodedResult) {
-        lastScannedText = decodedText; // Cập nhật kết quả quét mới nhất
-        document.getElementById('processScan').disabled = false; // Kích hoạt lại nút nếu quét thành công
+        // Xử lý kết quả quét thành công tại đây
+        console.log(`Decoded text: ${decodedText}`);
+        
+        // Điền kết quả quét được vào popup
+        document.querySelector('.result p').textContent = decodedText;
+
+        // Hiển thị popup-result bằng cách thay đổi bottom để nó trượt lên
+        document.querySelector('.popup-result').style.bottom = '0';
+
+      
+      
     }
 
     function onScanFailure(error) {
+        // Xử lý trường hợp quét thất bại hoặc lỗi tại đây
         console.warn(`QR code scanning failed. Reason: ${error}`);
     }
 
-    document.getElementById('processScan').addEventListener('click', function() {
-        const button = document.getElementById('processScan');
-        button.disabled = true; // Vô hiệu hóa nút khi bắt đầu xử lý
-
-        if (lastScannedText) {
-            const parts = lastScannedText.split('-');
-            if (parts.length === 4) {
-                // Thiết lập các giá trị cho form
-                document.getElementById('type').value = parts[0].trim();
-                document.getElementById('name').value = parts[1].trim();
-                document.getElementById('phone').value = parts[2].trim();
-                document.getElementById('email').value = parts[3].trim();
-
-                document.getElementById('inf_custom_TicketClass').value = parts[0].trim();
-                document.getElementById('inf_field_FirstName').value = parts[1].trim();
-                document.getElementById('inf_field_Phone1').value = parts[2].trim();
-                document.getElementById('inf_field_Email').value = parts[3].trim();
-
-                // Submit form
-                document.getElementById('qr-form').submit();
-                document.getElementById('inf_form_f4b35c3bb06a778103825fc98fc99724').submit();
-
-                // Reset trạng thái sau khi submit
-                setTimeout(() => {
-                    alert('Quét thành công');
-                    button.disabled = false;
-                }, 500); // Đặt timeout để đảm bảo form đã được gửi trước khi reset trạng thái nút
-            } else {
-                alert('QR code does not contain expected data.');
-                button.disabled = false;
-            }
-        } else {
-            alert('No QR code data found.');
-            button.disabled = false;
-        }
+    // Bắt đầu quét mã QR với cấu hình đã đặt
+    html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
+    .catch(err => {
+        // Xử lý nếu không thể bắt đầu quét QR
+        console.error(`Unable to start QR scanning. Reason: ${err}`);
     });
 });
 
-    </script>
+
+</script>
 </html>

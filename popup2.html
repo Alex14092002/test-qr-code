@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>test</title>
+    <style>
+        /* Style cho popup */
+.popup {
+    display: none; /* Ẩn popup khi chưa được gọi */
+    position: fixed; /* Đặt popup cố định trên màn hình */
+    z-index: 1; /* Đảm bảo popup luôn nằm trên cùng */
+    left: 0;
+    top: 0;
+    width: 100%; /* Chiều rộng toàn màn hình */
+    height: 100%; /* Chiều cao toàn màn hình */
+    overflow: auto; /* Tạo thanh cuộn nếu cần */
+    background-color: rgb(0,0,0); /* Màu nền */
+    background-color: rgba(0,0,0,0.4); /* Màu nền có độ mờ */
+}
+
+/* Style cho nội dung popup */
+.popup-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Canh giữa màn hình */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Chiều rộng của popup */
+}
+
+/* Style cho nút đóng */
+.closeBtn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.closeBtn:hover,
+.closeBtn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    </style>
+
+
+<style>
+      
+    .quesion{
+        height: 100vh;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        
+    }
+    ::-webkit-scrollbar {
+display: none; /* Cho Safari và Chrome */
+}
+
+/* Firefox không hỗ trợ ::-webkit-scrollbar, cần sử dụng thuộc tính khác */
+* {
+scrollbar-width: none; /* Cho Firefox */
+}
+.gruop{
+width: 50%;
+}
+.gruop h5{
+    color: rgb(1, 66, 172);
+    font-size: 24px;
+    font-weight: 400;
+   margin: 0;
+   padding: 10px 0;
+}
+.gruop input{
+    border: none;
+    border-bottom: 2px solid rgb(1, 66, 172);
+    width: 100%;
+    margin: 20px 0;
+    height: 50px;
+    font-size: 25px;
+    opacity: 0.5;
+    color: rgb(1, 66, 172);
+}
+.gruop select{
+    border: none;
+    border-bottom: 2px solid rgb(1, 66, 172);
+    width: 100%;
+    margin: 20px 0;
+    height: 50px;
+    font-size: 18px;
+    opacity: 0.5;
+    color: rgb(1, 66, 172);
+}
+.gruop input:focus{
+    outline: none;
+    opacity: 1;
+}
+.gruop input::placeholder{
+    color: rgb(1, 66, 172);
+}
+.gruop p {
+    color: rgb(1, 66, 172);
+    font-size: 20px;
+    font-weight: 300;
+}
+.gruop span{
+    color: rgb(1, 66, 172);
+    font-size: 16px;
+    font-weight: 400;
+}
+.gruop button{
+    background-color: rgb(1, 66, 172);
+    padding: 10px 30px;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.gruop button:hover{
+    opacity: 0.5;
+}
+@media(max-width : 700px){
+    .gruop{
+width: 100%;
+padding: 0 20px;
+}
+}
+@keyframes fadeIn {
+from {
+    opacity: 0;
+    transform: translateY(20px);
+}
+to {
+    opacity: 1;
+    transform: translateY(0);
+}
+}
+@keyframes fadeIn {
+from {
+    opacity: 0;
+    transform: translateY(20px);
+}
+to {
+    opacity: 1;
+    transform: translateY(0);
+}
+}
+
+.quesion.active {
+animation: fadeIn 0.8s ease-out forwards;
+}
+
+.radio-group{
+padding: 20px 0;
+}
+/* Ẩn radio button gốc */
+.radio-group input[type="radio"] {
+display: none;
+}
+
+/* Tạo custom radio button */
+.custom-radio {
+display: flex;
+align-items: center;
+position: relative;
+padding-left: 35px;
+margin-bottom: 12px;
+cursor: pointer;
+font-size: 18px;
+user-select: none;
+border: 2px solid transparent;
+padding: 10px 20px;
+border-radius: 5px; /* Bo tròn góc */
+transition: all 0.3s;
+border: 1px solid rgb(1, 66, 172);
+background-color: #e6ecf7;
+}
+.custom-radio:hover{
+background-color: rgb(181, 209, 255);
+}
+
+/* Màu viền và vị trí cho từng label */
+.custom-radio .label-circle {
+width: 25px;
+height: 25px;
+line-height: 25px;
+text-align: center;
+margin-right: 10px;
+border-radius: 5px;
+color: rgb(1, 66, 172);
+font-weight: bold;
+background-color:white rgb(1, 66, 172);
+border: 1px solid;
+display: inline-block;
+}
+
+.custom-radio .checkmark {
+display: none; /* Ẩn checkmark khi chưa được chọn */
+position: absolute;
+right: 10px;
+top: 50%;
+transform: translateY(-50%);
+width: 20px;
+height: 20px;
+border-radius: 50%;
+background-color: #1E90FF; /* Màu nền cho checkmark */
+}
+
+/* Tạo nhãn cho radio (A, B, C, D) */
+.custom-radio .radio-label {
+/* Các styles cơ bản đã được định nghĩa */
+display: inline-block;
+width: 22px;
+height: 22px;
+line-height: 22px;
+margin-right: 10px;
+background-color: #1E90FF; /* Màu nền cho nhãn */
+color: #FFF; /* Màu chữ cho nhãn */
+border-radius: 50%; /* Viền tròn cho nhãn */
+text-align: center;
+}
+
+/* Style cho text của radio */
+.custom-radio .label-text {
+/* Các styles cơ bản đã được định nghĩa */
+flex-grow: 1;
+}
+
+/* Định nghĩa lại style cho radio khi được chọn */
+.custom-radio input[type="radio"]:checked + .label-text {
+border: 2px solid rgb(1, 66, 172); /* Ví dụ: thay đổi màu viền */
+border-radius: 5px; /* Bo tròn góc */
+padding: 10px; /* Padding cho text */
+}
+.custom-radio input[type="radio"]:checked ~ .label-circle {
+border: 2px solid rgb(1, 66, 172); /* Thay đổi màu viền cho label-circle */
+}
+
+/* Hiển thị checkmark khi radio được chọn */
+.custom-radio input[type="radio"]:checked ~ .checkmark {
+display: block; /* Hiển thị checkmark */
+content: '✓'; /* Dấu tick */
+color: #FFF; /* Màu dấu tick */
+text-align: center;
+line-height: 20px; /* Căn giữa dấu tick */
+}
+.error-message{
+padding: 10px 0;
+}
+.wrap{
+height: 100vh;
+}
+@media (min-width: 576px){ 
+.modal-dialog {
+max-width: 90%;
+margin: 1.75rem auto;
+}
+
+}
+.button{
+padding: 10px 20px;
+border: 2px solid #fff;
+background-image: radial-gradient(circle, rgb(1, 176, 254), rgb(13, 98, 242));
+color: #fff;
+font-size: 20px;
+border-radius: 30px;
+font-weight: bold;
+}
+#popup{
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<button id="openPopupBtn">Mở Popup</button>
+
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="closeBtn">&times;</span>
+        <form accept-charset="UTF-8" action="https://ib968.infusionsoft.com/app/form/process/6c02d38607a938b263dcdabba30380e9" class="infusion-form" id="inf_form_6c02d38607a938b263dcdabba30380e9" method="POST">
+            <input name="inf_form_xid" type="hidden" value="6c02d38607a938b263dcdabba30380e9" />
+            <input name="inf_form_name" type="hidden" value="Web Form" />
+            <input name="infusionsoft_version" type="hidden" value="1.70.0.642516" />
+            <div class="quesion">
+                <div class="gruop">
+                    <h5> Tên của bạn là gì *</h5>
+                    <p>Ví dụ : Nguyễn Văn A</p>
+        
+                    <span>Họ và tên *</span>
+                    <input  id="inf_field_FirstName" name="inf_field_FirstName" type="text" placeholder="Nhập tên của bạn">
+                    <button class="btn-continute" data-index="0">OK <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708934750/avxvjgjt3cd5p9lj3xzz.png" width='50px' alt=""></button>
+                </div>
+            </div>
+            <div class="quesion">
+                <div class="gruop">
+                    <h5> Số điện thoại</h5>
+                    <p>Ví dụ : 0987651222</p>
+                    <span>Số địện thoại *</span>
+                    <input type="text" id="inf_field_Phone1" name="inf_field_Phone1" placeholder="Nhập số điện thoại" id='phone'>
+                    <div class="error-message" style="color: red;"></div>
+                    <button class="btn-continute" data-index="1">OK <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708934750/avxvjgjt3cd5p9lj3xzz.png" width='50px' alt=""></button>
+                    <button class="btn-prev" >Trước <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708935268/dryvtds9b4olndqqqcpr.png" width="20px" alt=""></button>
+                </div>
+            </div>
+            <div class="quesion">
+                <div class="gruop">
+                    <h5> Email</h5>
+                    <p>Ví dụ : nguyenvana@gmail.com</p>
+                    <span>Email *</span>
+                    <input type="text" placeholder="Nhập email"  id="inf_field_Email" name="inf_field_Email" >
+                    <div class="error-message" style="color: red;"></div>
+                    <button class="btn-continute" data-index="2">OK <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708934750/avxvjgjt3cd5p9lj3xzz.png" width='50px' alt=""></button>
+                    <button class="btn-prev" >Trước <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708935268/dryvtds9b4olndqqqcpr.png" width="20px" alt=""></button>
+                </div>
+            </div>
+            <div class="quesion">
+                <div class="gruop">
+                    <h5> Tên doanh nghiệp</h5>
+                    <p>Ví dụ : Công ty TNHH Hữu Phát</p>
+                    <span>Tên doanh nghiệp *</span>
+                    <input name="tenDoanhNghiep" type="text" placeholder="Nhập tên doanh nghiệp">
+                    <div class="error-message" style="color: red;"></div>
+                    <button class="btn-continute" data-index="3">OK <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708934750/avxvjgjt3cd5p9lj3xzz.png" width='50px' alt=""></button>
+                    <button class="btn-prev" >Trước <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708935268/dryvtds9b4olndqqqcpr.png" width="20px" alt=""></button>
+                </div>
+            </div>
+            <div class="quesion">
+                <div class="gruop">
+                    <h5> Chức danh</h5>
+                    <p>Chọn 1 chức danh</p>
+                    <span>Chức danh *</span>
+                    <select id="inf_custom_Đốitượng" name="inf_custom_Đốitượng">
+                        <option selected="selected" value="Chủ doanh nghiệp">Chủ doanh nghiệp</option>
+                        <option value="Quản lý">Quản lý</option>
+                        <option value="Người đi làm">Người đi làm</option>
+                        <option value="Kinh doanh tự do">Kinh doanh tự do</option>
+                    </select>
+                    <div class="error-message" style="color: red;"></div>
+                    <button class="btn-continute" data-index="4">OK <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708934750/avxvjgjt3cd5p9lj3xzz.png" width='50px' alt=""></button>
+                    <button class="btn-prev" >Trước <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708935268/dryvtds9b4olndqqqcpr.png" width="20px" alt=""></button>
+                </div>
+            </div>
+            <div class="quesion">
+                <div class="gruop">
+                    <h5> Ngành nghề kinh doanh</h5>
+                    <p>Ví dụ : Bất động sản</p>
+                    <span>Ngành nghề kinh doanh *</span>
+                    <input type="text" name='nganhNghe' placeholder="Nhập tên ngành nghề kinh doanh">
+                    <div class="error-message" style="color: red;"></div>
+                    <button class="btn-continute" data-index="5">OK <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708934750/avxvjgjt3cd5p9lj3xzz.png" width='50px' alt=""></button>
+                    <button class="btn-prev" >Trước <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708935268/dryvtds9b4olndqqqcpr.png" width="20px" alt=""></button>
+                </div>
+            </div>
+        
+            <div class="quesion">
+                <div class="gruop">
+                    <h5> Sản phẩm dịch vụ</h5>
+                    <p>Ví dụ : Nhà, đất</p>
+                    <span>Sản phẩm dịch vụ *</span>
+                    <input type="text" name="sanPhamDichVu" placeholder="Nhập tên sản phẩm dịch vụ">
+                    <div class="error-message" style="color: red;"></div>
+                    <button class="btn-continute" data-index="6">OK <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708934750/avxvjgjt3cd5p9lj3xzz.png" width='50px' alt=""></button>
+                    <button class="btn-prev" >Trước <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708935268/dryvtds9b4olndqqqcpr.png" width="20px" alt=""></button>
+                </div>
+            </div>
+        
+        
+            <div class="quesion">
+                <div class="gruop">
+                    <h5>Số lượng nhân viên sale </h5>
+                    
+                    <div class="radio-group">
+                        <label class="custom-radio ">
+                            <div class="label-circle">A</div>
+                            <span class="label-text">Dưới 10 Nhân Sự</span>
+                            <input type="radio" name="soLuongNhanVien" value="under-10">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="custom-radio ">
+                            <div class="label-circle">B</div>
+                            <span class="label-text">10 Nhân Sự - 50 Nhân Sự</span>
+                            <input type="radio" name="soLuongNhanVien" value="10-50">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="custom-radio ">
+                            <div class="label-circle">C</div>
+                            <span class="label-text">50 Nhân Sự - 100 Nhân Sự</span>
+                            <input type="radio" name="soLuongNhanVien" value="50-100">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="custom-radio ">
+                            <div class="label-circle">D</div>
+                            <span class="label-text">Trên 100 Nhân Sự</span>
+                            <input type="radio" name="soLuongNhanVien" value="over-100" checked>
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="error-message" style="color: red;"></div>
+                    <button class="btn-continute" data-index="7">OK <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708934750/avxvjgjt3cd5p9lj3xzz.png" width='50px' alt=""></button>
+                    <button class="btn-prev" >Trước <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708935268/dryvtds9b4olndqqqcpr.png" width="20px" alt=""></button>
+                </div>
+            </div>
+        
+        
+            <div class="quesion">
+                <div class="gruop">
+                    <h5>Doanh thu trung bình tháng </h5>
+                    
+                    <div class="radio-group">
+                        <label class="custom-radio ">
+                            <div class="label-circle">A</div>
+                            <span class="label-text">Dưới 150 Triệu/Tháng</span>
+                            <input type="radio" name="doanhThu" value="Dưới 150 Triệu/Tháng">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="custom-radio ">
+                            <div class="label-circle">B</div>
+                            <span class="label-text">Từ 150 Triệu - 1 Tỷ/Tháng</span>
+                            <input type="radio" name="doanhThu" value="Từ 150 Triệu - 1 Tỷ/Tháng">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="custom-radio ">
+                            <div class="label-circle">C</div>
+                            <span class="label-text">1 Tỷ/Tháng đến 5 Tỷ/Tháng </span>
+                            <input type="radio" name="doanhThu" value="1 Tỷ/Tháng đến 5 Tỷ/Tháng">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="custom-radio ">
+                            <div class="label-circle">D</div>
+                            <span class="label-text">Trên 5 Tỷ/Tháng</span>
+                            <input type="radio" name="doanhThu" value="Trên 5 Tỷ/Tháng" checked>
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <input name="inf_custom_Affiliate" type="hidden" [urlparam attr="value" param='ref']/>
+                    <div class="error-message" style="color: red;"></div>
+                    
+                    <button type="submit" id='btn-send'>Gửi thông tin</button>
+                    <button class="btn-prev" >Trước <img src="https://res.cloudinary.com/dnasp7ghs/image/upload/v1708935268/dryvtds9b4olndqqqcpr.png" width="20px" alt=""></button>
+                </div>
+            </div>
+        </form> 
+    
+        
+    </div>
+</div>
+
+
+<form style="display:none;" accept-charset="UTF-8" action="https://script.google.com/macros/s/AKfycbyPK0A2j-ajuOY75lFG4gCE9piWHvfhZDFnuBKivFJznL9GX0SAXVzFBbtlQdO2swtY/exec" class="infusion-form" id="secondform" method="GET">
+    <input name="inf_form_xid" type="hidden" value="6c02d38607a938b263dcdabba30380e9" />
+    <input name="inf_form_name" type="hidden" value="Web Form" />
+    <input name="infusionsoft_version" type="hidden" value="1.70.0.642516" />
+    <div class="quesion">
+        <div class="gruop">
+            <h5> Tên của bạn là gì *</h5>
+            <p>Ví dụ : Nguyễn Văn A</p>
+
+            <span>Họ và tên *</span>
+            <input  id="inf_field_FirstName" name="inf_field_FirstName" type="text" placeholder="Nhập tên của bạn">
+            <button class="btn-continute" data-index="0">OK</button>
+        </div>
+    </div>
+    <div class="quesion">
+        <div class="gruop">
+            <h5> Số điện thoại</h5>
+            <p>Ví dụ : 0987651222</p>
+            <span>Số địện thoại *</span>
+            <input type="text" id="inf_field_Phone1" name="inf_field_Phone1" placeholder="Nhập số điện thoại" id='phone'>
+            <div class="error-message" style="color: red;"></div>
+            <button class="btn-continute" data-index="1" data-validate="phone">OK</button>
+            
+        </div>
+    </div>
+    <div class="quesion">
+        <div class="gruop">
+            <h5> Email</h5>
+            <p>Ví dụ : nguyenvana@gmail.com</p>
+            <span>Email *</span>
+            <input type="text" placeholder="Nhập email"  id="inf_field_Email" name="inf_field_Email" >
+            <div class="error-message" style="color: red;"></div>
+            <button class="btn-continute" data-index="2" data-validate="email">OK</button>
+        </div>
+    </div>
+    <div class="quesion">
+        <div class="gruop">
+            <h5> Tên doanh nghiệp</h5>
+            <p>Ví dụ : Công ty TNHH Hữu Phát</p>
+            <span>Tên doanh nghiệp *</span>
+            <input name="tenDoanhNghiep" type="text" placeholder="Nhập tên doanh nghiệp">
+            <div class="error-message" style="color: red;"></div>
+            <button class="btn-continute" data-index="3">OK</button>
+        </div>
+    </div>
+    <div class="quesion">
+        <div class="gruop">
+            <h5> Chức danh</h5>
+            <p>Chọn 1 chức danh</p>
+            <span>Chức danh *</span>
+            <select id="inf_custom_Đốitượng" name="inf_custom_Đốitượng">
+                <option selected="selected" value="Chủ doanh nghiệp">Chủ doanh nghiệp</option>
+                <option value="Quản lý">Quản lý</option>
+                <option value="Người đi làm">Người đi làm</option>
+                <option value="Kinh doanh tự do">Kinh doanh tự do</option>
+            </select>
+            <div class="error-message" style="color: red;"></div>
+            <button class="btn-continute" data-index="4">OK</button>
+        </div>
+    </div>
+    <div class="quesion">
+        <div class="gruop">
+            <h5> Ngành nghề kinh doanh</h5>
+            <p>Ví dụ : Bất động sản</p>
+            <span>Ngành nghề kinh doanh *</span>
+            <input type="text" name='nganhNghe' placeholder="Nhập tên ngành nghề kinh doanh">
+            <div class="error-message" style="color: red;"></div>
+            <button class="btn-continute" data-index="5">OK</button>
+        </div>
+    </div>
+
+    <div class="quesion">
+        <div class="gruop">
+            <h5> Sản phẩm dịch vụ</h5>
+            <p>Ví dụ : Nhà, đất</p>
+            <span>Sản phẩm dịch vụ *</span>
+            <input type="text" name="sanPhamDichVu" placeholder="Nhập tên sản phẩm dịch vụ">
+            <div class="error-message" style="color: red;"></div>
+            <button class="btn-continute" data-index="6">OK</button>
+        </div>
+    </div>
+
+
+    <div class="quesion">
+        <div class="gruop">
+            <h5>Số lượng nhân viên sale </h5>
+            
+            <div class="radio-group">
+                <label class="custom-radio ">
+                    <div class="label-circle">A</div>
+                    <span class="label-text">Dưới 10 Nhân Sự</span>
+                    <input type="radio" name="soLuongNhanVien" value="under-10">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="custom-radio ">
+                    <div class="label-circle">B</div>
+                    <span class="label-text">10 Nhân Sự - 50 Nhân Sự</span>
+                    <input type="radio" name="soLuongNhanVien" value="10-50">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="custom-radio ">
+                    <div class="label-circle">C</div>
+                    <span class="label-text">50 Nhân Sự - 100 Nhân Sự</span>
+                    <input type="radio" name="soLuongNhanVien" value="50-100">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="custom-radio ">
+                    <div class="label-circle">D</div>
+                    <span class="label-text">Trên 100 Nhân Sự</span>
+                    <input type="radio" name="soLuongNhanVien" value="over-100" checked>
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            
+            <div class="error-message" style="color: red;"></div>
+            <button class="btn-continute" data-index="7">OK</button>
+        </div>
+    </div>
+
+
+    <div class="quesion">
+        <div class="gruop">
+            <h5>Doanh thu trung bình tháng </h5>
+            
+            <div class="radio-group">
+                <label class="custom-radio ">
+                    <div class="label-circle">A</div>
+                    <span class="label-text">Dưới 150 Triệu/Tháng</span>
+                    <input type="radio" name="doanhThu" value="Dưới 150 Triệu/Tháng">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="custom-radio ">
+                    <div class="label-circle">B</div>
+                    <span class="label-text">Từ 150 Triệu - 1 Tỷ/Tháng</span>
+                    <input type="radio" name="doanhThu" value="Từ 150 Triệu - 1 Tỷ/Tháng">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="custom-radio ">
+                    <div class="label-circle">C</div>
+                    <span class="label-text">1 Tỷ/Tháng đến 5 Tỷ/Tháng </span>
+                    <input type="radio" name="doanhThu" value="1 Tỷ/Tháng đến 5 Tỷ/Tháng">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="custom-radio ">
+                    <div class="label-circle">D</div>
+                    <span class="label-text">Trên 5 Tỷ/Tháng</span>
+                    <input type="radio" name="doanhThu" value="Trên 5 Tỷ/Tháng" checked>
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <input name="inf_custom_Affiliate" type="hidden" [urlparam attr="value" param='ref']/>
+            <div class="error-message" style="color: red;"></div>
+            <button type="submit" id='btn-send'>Gửi thông tin</button>
+        </div>
+    </div>
+</form>
+   
+
+<script>
+    // Lấy phần tử popup và nút mở popup
+var popup = document.getElementById("popup");
+var btn = document.getElementById("openPopupBtn");
+
+// Lấy phần tử nút đóng popup
+var closeBtn = document.getElementsByClassName("closeBtn")[0];
+
+// Khi nút mở popup được nhấn, hiển thị popup
+btn.onclick = function() {
+    popup.style.display = "block";
+}
+
+// Khi nút đóng được nhấn, ẩn popup
+closeBtn.onclick = function() {
+    popup.style.display = "none";
+}
+
+// Khi người dùng nhấn vào bất kỳ đâu bên ngoài popup, ẩn nó
+window.onclick = function(event) {
+    if (event.target == popup) {
+        popup.style.display = "none";
+    }
+}
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+  function validatePhone() {
+    const phoneInput = document.getElementById("inf_field_Phone1");
+    const phoneError = phoneInput.nextElementSibling; // Thẻ div hiển thị lỗi
+    const phoneValue = phoneInput.value;
+    const phoneRegex = /^\d{10}$/; // Regex để kiểm tra số điện thoại 10 số
+
+    if (!phoneRegex.test(phoneValue)) {
+      phoneError.textContent = "Số điện thoại phải là 10 chữ số.";
+      return false;
+    } else {
+      phoneError.textContent = ""; // Xóa thông báo lỗi nếu có
+      return true;
+    }
+  }
+
+  function validateEmail() {
+    const emailInput = document.getElementById("inf_field_Email");
+    const emailError = emailInput.nextElementSibling;
+    const emailValue = emailInput.value;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex để kiểm tra email
+
+    if (!emailRegex.test(emailValue)) {
+      emailError.textContent = "Email không hợp lệ.";
+      return false;
+    } else {
+      emailError.textContent = "";
+      return true;
+    }
+  }
+  const modalContent = document.querySelector(".modal-dialog"); // Điều chỉnh nếu cần để chọn đúng phần tử modal
+
+  const buttons = document.querySelectorAll(".btn-continute");
+  buttons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault(); // Ngăn chặn hành vi mặc định của nút submit
+      const validateType = button.getAttribute("data-validate");
+      let isValid = false; // Biến để kiểm tra xem trường hiện tại có hợp lệ không
+
+      // Kiểm tra dựa trên loại validation
+      switch (validateType) {
+        case "phone":
+          isValid = validatePhone();
+          break;
+        case "email":
+          isValid = validateEmail();
+          break;
+        // Thêm case cho các trường khác nếu cần
+        default:
+          isValid = true; // Nếu không cần validate, coi như hợp lệ
+      }
+
+      if (isValid) {
+        const currentSection = e.target.closest(".quesion");
+        const nextSection = currentSection.nextElementSibling;
+
+        if (nextSection) {
+          nextSection.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "start",
+          });
+        }
+      }
+    });
+  });
+});
+
+
+document
+  .getElementById("inf_form_6c02d38607a938b263dcdabba30380e9")
+  .addEventListener("submit", function (e) {
+    e.preventDefault(); // Ngăn không cho form chính gửi dữ liệu ngay lập tức
+    syncFormData(); // Đồng bộ dữ liệu trước khi gửi
+
+    // Gửi form ẩn
+    document.getElementById("secondform").submit();
+
+    // Gửi form chính sau một khoảng thời gian ngắn để đảm bảo form ẩn được gửi trước
+    setTimeout(function () {
+      e.target.submit(); // Gửi form chính
+    }, 1000); // Đợi 1 giây
+  });
+
+// Đảm bảo rằng bạn cũng cập nhật hàm này để phù hợp với logic mới nếu cần
+document
+  .getElementById("inf_form_6c02d38607a938b263dcdabba30380e9")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+    syncFormData();
+    document.getElementById("secondform").submit();
+    setTimeout(function () {
+      e.target.submit();
+    }, 1000);
+  });
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Sự kiện cho nút "Trước"
+  const prevButtons = document.querySelectorAll(".btn-prev");
+  prevButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault(); // Ngăn chặn hành vi mặc định của nút
+
+      const currentSection = e.target.closest(".quesion");
+      const prevSection = currentSection.previousElementSibling;
+
+      if (prevSection) {
+        prevSection.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "start",
+        });
+      }
+    });
+  });
+});
+
+</script>
+
+
+        <script type="text/javascript" src="https://ib968.infusionsoft.app/app/webTracking/getTrackingCode"></script>
+         <script type="text/javascript" src="https://ib968.infusionsoft.com/app/timezone/timezoneInputJs?xid=6c02d38607a938b263dcdabba30380e9"></script>
+         <script type="text/javascript" src="https://ib968.infusionsoft.com/js/jquery/jquery-3.3.1.js"></script>
+         <script type="text/javascript" src="https://ib968.infusionsoft.app/app/webform/overwriteRefererJs"></script>
+</body>
+</html>

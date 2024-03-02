@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    .main-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.form-dk {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+}
+
+.infusion-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.infusion-field {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,.25);
+}
+
+.infusion-radio .options-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.infusion-option label {
+    margin-left: 8px;
+}
+
+.infusion-submit button {
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.infusion-submit button:hover {
+    background-color: #0056b3;
+}
+.options-container{
+    display: flex !important;
+    justify-content: space-between;
+    flex-direction : row !important;
+}     
+.infusion-option{
+    display: flex;
+    align-items: center !important;
+    justify-content: center;
+}
+.infusion-option label{
+    margin-bottom:  0 !important;
+}
+
+    </style>
+</head>
+<body>
+    <div class="main-form">
+        <div class="form-dk">
+            <form accept-charset="UTF-8" action="https://ib968.infusionsoft.com/app/form/process/e790fd03b906c93c8e5048907e3a85c2" class="infusion-form" id="inf_form_e790fd03b906c93c8e5048907e3a85c2" method="POST">
+                <input name="inf_form_xid" type="hidden" value="e790fd03b906c93c8e5048907e3a85c2" />
+                <input name="inf_form_name" type="hidden" value="Xuất vé tại chương trình" />
+                <input name="infusionsoft_version" type="hidden" value="1.70.0.644579" />
+                <div class="infusion-field">
+                    <label for="inf_field_FirstName">Họ &amp; T&ecirc;n: *</label> <br>
+                    <input id="inf_field_FirstName" name="inf_field_FirstName" placeholder="Họ &amp; T&ecirc;n: *" type="text" />
+                </div>
+                <div class="infusion-field">
+                    <label for="inf_field_Phone1">Số điện thoại *</label>  <br>
+                    <input id="inf_field_Phone1" name="inf_field_Phone1" placeholder="Số điện thoại *" type="text" />
+                </div>
+                <div class="infusion-field">
+                    <label for="inf_field_Email">Email *</label>  <br>
+                    <input id="inf_field_Email" name="inf_field_Email" placeholder="Email *" type="text" />
+                </div>
+                <div class="infusion-field">
+                    <label for="inf_custom_Đốitượng">Hiện Anh/Chị đang l&agrave; *</label> <br>
+                    <div class="infusion-field-input-container">
+                        <select id="inf_custom_Đốitượng" name="inf_custom_Đốitượng"><option selected="selected" value="Chủ doanh nghiệp">Chủ doanh nghiệp</option><option value="Quản lý">Quản lý</option><option value="Người đi làm">Người đi làm</option><option value="Kinh doanh tự do">Kinh doanh tự do</option></select>
+                    </div>
+                </div>
+                <div class="infusion-field">
+                    <label for="inf_option_Hạngvé">Hạng v&eacute; *</label> <br>
+
+                    <div class="infusion-radio">
+                        <div class="options-container">
+                            <span class="infusion-option">
+                                <input checked="checked" id="inf_option_Hạngvé_1268" name="inf_option_Hạngvé" type="radio" value="1268" />
+                                <label for="inf_option_Hạngvé_1268">V&eacute; VIP</label>
+                            </span>
+                            <span class="infusion-option">
+                                <input id="inf_option_Hạngvé_1270" name="inf_option_Hạngvé" type="radio" value="1270" />
+                                <label for="inf_option_Hạngvé_1270">V&eacute; Diamond</label>
+                            </span>
+                            <span class="infusion-option">
+                                <input id="inf_option_Hạngvé_1272" name="inf_option_Hạngvé" type="radio" value="1272" />
+                                <label for="inf_option_Hạngvé_1272">V&eacute; Platinum</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <input name="inf_custom_Affiliate" type="hidden" value="null" />
+                <input name="inf_custom_TicketClass" type="hidden" value="null" />
+                <div>
+                    <div>&nbsp;</div>
+                </div>
+                <div class="infusion-submit">
+                    <button type="submit">Đăng K&yacute; Ngay!</button>
+                </div>
+            </form>
+        </div>
+    </div>
+   
+ 
+
+    <script type="text/javascript" src="https://ib968.infusionsoft.app/app/webTracking/getTrackingCode"></script>
+    <script type="text/javascript" src="https://ib968.infusionsoft.com/app/timezone/timezoneInputJs?xid=e790fd03b906c93c8e5048907e3a85c2"></script>
+    <script type="text/javascript" src="https://ib968.infusionsoft.com/js/jquery/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="https://ib968.infusionsoft.app/app/webform/overwriteRefererJs"></script>
+</body>
+</html>

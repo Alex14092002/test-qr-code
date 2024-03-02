@@ -214,8 +214,6 @@ window.addEventListener('resize', setCameraHeight);
 
 
 
-
-
         document.getElementById('inf_custom_TicketClass').value = parts[0]; // type
         document.getElementById('inf_field_FirstName').value = parts[1]; // name
         document.getElementById('inf_field_Phone1').value = parts[2]; // phone
@@ -237,11 +235,47 @@ window.addEventListener('resize', setCameraHeight);
     });
 });
 
-const save = () =>{
+const save = () => {
+    // Ẩn popup
     document.querySelector('.popup-result').style.bottom = '-50%';
-    document.querySelector('#qr-form').submit();
-    document.querySelector('#inf_form_f4b35c3bb06a778103825fc98fc99724').submit()
+
+    // Chuẩn bị dữ liệu từ form đầu tiên
+    const qrForm = document.querySelector('#qr-form');
+    const formData = new FormData(qrForm);
+
+    // Sử dụng fetch để gửi dữ liệu form đầu tiên
+    fetch(qrForm.action, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        // Kiểm tra phản hồi từ server
+        if (response.ok) {
+            console.log('Form đầu tiên gửi thành công. Đang gửi form thứ hai...');
+            // Chuẩn bị và gửi form thứ hai sau khi form đầu tiên thành công
+            const secondForm = document.querySelector('#inf_form_f4b35c3bb06a778103825fc98fc99724');
+            const secondFormData = new FormData(secondForm);
+            return fetch(secondForm.action, {
+                method: 'POST',
+                body: secondFormData,
+            });
+        } else {
+            // Xử lý lỗi
+            throw new Error('Có lỗi xảy ra khi gửi form đầu tiên');
+        }
+    })
+    .then(secondResponse => {
+        if (secondResponse.ok) {
+            console.log('Form thứ hai gửi thành công.');
+        } else {
+            throw new Error('Có lỗi xảy ra khi gửi form thứ hai');
+        }
+    })
+    .catch(error => {
+        console.error('Lỗi:', error);
+    });
 }
+
 
 
 

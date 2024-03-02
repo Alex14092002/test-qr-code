@@ -180,7 +180,7 @@ window.addEventListener('resize', setCameraHeight);
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     // Tính toán kích thước qrbox dựa trên kích thước màn hình, ví dụ: lấy 75% kích thước nhỏ nhất của màn hình
-    const qrBoxSize = Math.min(screenWidth, screenHeight) * 1;
+    const qrBoxSize = Math.min(screenWidth, screenHeight) * 0.5;
 
     // Cấu hình cho việc quét QR, sử dụng toàn bộ màn hình và đặt qrbox ở trung tâm
     const config = {

@@ -29,11 +29,14 @@
         }
         #qr-reader {
     width: 100vw; /* Chiều rộng bằng 100% viewport width */
-    height: 100vh; /* Chiều cao bằng 100% viewport height */
+    min-height: 100vh; /* Đảm bảo rằng chiều cao tối thiểu bằng 100% viewport height */
     position: fixed; /* Đặt phần tử này cố định trên màn hình */
     top: 0;
     left: 0;
+    /* Có thể cần thêm */
+    overflow: hidden; /* Ẩn nội dung tràn ra ngoài */
 }
+
 
 .popup-result{
     position: absolute;
@@ -158,6 +161,14 @@
 <script type="text/javascript" src="https://ib968.infusionsoft.app/app/webfor...efererJs"></script>
 </body>
 <script>
+    function adjustQRReaderHeight() {
+    const qrReader = document.getElementById('qr-reader');
+    qrReader.style.height = `${window.innerHeight}px`;
+}
+
+window.addEventListener('load', adjustQRReaderHeight);
+window.addEventListener('resize', adjustQRReaderHeight);
+
   window.addEventListener('load', function() {
     // Khởi tạo Html5Qrcode scanner
     const html5QrCode = new Html5Qrcode("qr-reader");

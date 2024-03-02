@@ -161,6 +161,10 @@
 <script type="text/javascript" src="https://ib968.infusionsoft.app/app/webfor...efererJs"></script>
 </body>
 <script>
+    document.getElementById('qr-reader').addEventListener('touchmove', function(e) {
+    e.preventDefault();
+}, { passive: false });
+
   function setCameraHeight() {
     // Lấy chiều cao thực tế của window
     const height = window.innerHeight;
